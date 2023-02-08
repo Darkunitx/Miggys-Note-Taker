@@ -1,3 +1,3 @@
-const api = require(express).Router();
+const api = require('express').Router();
 
 module.exports = api;
