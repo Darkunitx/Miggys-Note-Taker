@@ -1,3 +1,3 @@
-const api = require('./routes/apiroutes.js');
+const api = require(express).Router();
 
 module.exports = api;

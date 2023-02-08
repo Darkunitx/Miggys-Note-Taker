@@ -1,3 +1,3 @@
-const html = require('../controllers/htmlcontroller.js');
+const html = require(express).Router();
 
 module.exports = html;
