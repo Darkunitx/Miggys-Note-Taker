@@ -1,40 +1,39 @@
 const router = require('express').Router();
 const fs = require("fs");
 const path = require("path");
+const { v4: uuidv4 } = require('uuid');
+
+let notes = [];
+
+
 
 // All of these Routes are prefixed with '/api'
 router.get('/notes', (req, res) => {
-  //console.log(req);
-
-  // What logic needs to happen here?
-  // 1. Read the db.json file
   fs.readFile(path.join(__dirname, "../db/db.json"), "utf8", (err, data) => {
-    // Is there are ERROR?
-    if(err) {
-      console.log(err);
-      throw err;
-    }
-    // Success - we have data
-    console.log(data);
-  // 2. Send the data back to the client
-    res.json(data);
+      
+      notes = JSON.parse(data);
+  
+      res.json(notes);
 
-  /*
-    res.send(
-      'Use the API endpoint at <a href="http://localhost:3001/api">localhost:3001/api</a>'
-    );
-    */
   });
 });
 
 router.post('/notes', (req, res) => {
-  res.send("POST /api/notes")
+  fs.readFile(path.join(__dirname, "../db/db.json"), "utf8", (err, data) => {
+    if (err) throw err;
+    notes = JSON.parse(data);
+    const newNote = req.body;
+    newNote.id = uuidv4();
+    notes.push(newNote);
+    fs.writeFile(path.join(__dirname, "../db/db.json"), JSON.stringify(notes), (err) => {
+      if (err) throw err;
+      res.json(notes);
+    });
+  });
 });
 
-router.delete('/notes/:id', (req, res) => {
-  res.send("DELETE /api/notes/:id")
-});
+  router.delete('/notes/:id', (req, res) => {
+    res.send("DELETE /api/notes/:id")
+  });
 
-//router.get('/api', (req, res) => res.json(ReposData));
-
-module.exports = router;
+  module.exports = router;
